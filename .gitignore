@@ -1,0 +1,6 @@
+*.DS_Store
+/_build
+/deps
+/docs
+erl_crash.dump
+*.ez
