@@ -33,6 +33,84 @@ defmodule Moment do
             nanosecond: microsecond * 1000, offset: offset}
   end
 
+
+  # Accessors
+  # ---------
+
+  @doc """
+  year
+  """
+  def year(moment) do
+    moment.year
+  end
+
+  @doc """
+  quarter, in [1; 4]
+  """
+  def quarter(moment) do
+    div(moment.month - 1, 3) + 1
+  end
+
+  @doc """
+  month, in [1; 12]
+  """
+  def month(moment) do
+    moment.month
+  end
+
+  @doc """
+  day, in [1; 31]
+  """
+  def day(moment) do
+    moment.day
+  end
+
+  @doc """
+  hour, in [0; 23]
+  """
+  def hour(moment) do
+    moment.hour
+  end
+
+  @doc """
+  minute, in [0; 59]
+  """
+  def minute(moment) do
+    moment.minute
+  end
+
+  @doc """
+  second, in [0; 59]
+  """
+  def second(moment) do
+    moment.second
+  end
+
+  @doc """
+  millisecond, in [0; 1000[
+  """
+  def millisecond(moment) do
+    div(moment.nanosecond, 1_000_000)
+  end
+
+  @doc """
+  microsecond, in [0; 1,000,000[
+  """
+  def microsecond(moment) do
+    div(moment.nanosecond, 1_000)
+  end
+
+  @doc """
+  nanosecond, in [0; 1,000,000,000[
+  """
+  def nanosecond(moment) do
+    moment.nanosecond
+  end
+
+
+  # Formatting
+  # ----------
+
   @doc """
   Format moment as an ISO8601 string.
   """
@@ -45,6 +123,7 @@ defmodule Moment do
   """
   def format(moment, "YYYY" <> rest), do: Integer.to_string(moment.year)          <> format(moment, rest)
   def format(moment,   "YY" <> rest), do: format_digits(rem(moment.year, 100), 2) <> format(moment, rest)
+  def format(moment,    "Q" <> rest), do: Integer.to_string(quarter(moment))      <> format(moment, rest)
   def format(moment,   "MM" <> rest), do: format_digits(moment.month, 2)          <> format(moment, rest)
   def format(moment,    "M" <> rest), do: Integer.to_string(moment.month)         <> format(moment, rest)
   def format(moment,   "DD" <> rest), do: format_digits(moment.day, 2)            <> format(moment, rest)
@@ -104,7 +183,9 @@ defmodule Moment do
     ""
   end
 
-  ## Private
+
+  # Private
+  # -------
 
   defp calc_offset(now) do
     local = now
@@ -115,7 +196,7 @@ defmodule Moment do
     |> :calendar.now_to_universal_time
     |> :calendar.datetime_to_gregorian_seconds
 
-    div(local , 60) - div(universal, 60)
+    div(local, 60) - div(universal, 60)
   end
 
   defp format_digits(i, n \\ 2) do
