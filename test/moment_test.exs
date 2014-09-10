@@ -52,6 +52,11 @@ defmodule Moment.MomentTest do
     assert Moment.nanosecond(make_moment()) == 37
   end
 
+  test "to_iso_string/1" do
+    assert Moment.to_iso_string(make_moment()) == "2014-09-10T20:36:55.566+09:00"
+    assert Moment.to_iso_string(make_utc_moment()) == "2014-09-10T11:36:55.566+00:00"
+  end
+
   defp make_moment() do
     %Moment{year: 2014, month: 9, day: 10, hour: 20, minute: 36, second: 55, nanosecond: 566245037, offset: 540}
   end

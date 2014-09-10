@@ -121,71 +121,113 @@ defmodule Moment do
   @doc """
   Format moment according to format string.
   """
-  def format(moment, "YYYY" <> rest), do: Integer.to_string(moment.year)          <> format(moment, rest)
-  def format(moment,   "YY" <> rest), do: format_digits(rem(moment.year, 100), 2) <> format(moment, rest)
-  def format(moment,    "Q" <> rest), do: Integer.to_string(quarter(moment))      <> format(moment, rest)
-  def format(moment,   "MM" <> rest), do: format_digits(moment.month, 2)          <> format(moment, rest)
-  def format(moment,    "M" <> rest), do: Integer.to_string(moment.month)         <> format(moment, rest)
-  def format(moment,   "DD" <> rest), do: format_digits(moment.day, 2)            <> format(moment, rest)
-  def format(moment,    "D" <> rest), do: Integer.to_string(moment.day)           <> format(moment, rest)
-  def format(moment,   "HH" <> rest), do: format_digits(moment.hour, 2)           <> format(moment, rest)
-  def format(moment,    "H" <> rest), do: Integer.to_string(moment.hour)          <> format(moment, rest)
-  def format(moment,   "mm" <> rest), do: format_digits(moment.minute, 2)         <> format(moment, rest)
-  def format(moment,    "m" <> rest), do: Integer.to_string(moment.minute)        <> format(moment, rest)
-  def format(moment,   "ss" <> rest), do: format_digits(moment.second, 2)         <> format(moment, rest)
-  def format(moment,    "s" <> rest), do: Integer.to_string(moment.second)        <> format(moment, rest)
-
-  def format(moment, "SSSSSSSSS" <> rest) do
-    format_digits(moment.nanosecond, 9) <> format(moment, rest)
-  end
-
-  def format(moment, "SSSSSS" <> rest) do
-    format_digits(div(moment.nanosecond, 1_000), 6) <> format(moment, rest)
-  end
-
-  def format(moment, "SSS" <> rest) do
-    format_digits(div(moment.nanosecond, 1_000_000), 3) <> format(moment, rest)
-  end
-
-  def format(moment, "SS" <> rest) do
-    format_digits(div(moment.nanosecond, 10_000_000), 2) <> format(moment, rest)
-  end
-
-  def format(moment, "S" <> rest) do
-    Integer.to_string(div(moment.nanosecond, 100_000_000)) <> format(moment, rest)
-  end
-
-  def format(moment, "ZZ" <> rest) do
-    offset_h = format_digits(div(abs(moment.offset), 60), 2)
-    offset_m = format_digits(rem(abs(moment.offset), 60), 2)
-    if moment.offset >= 0 do
-      "+#{offset_h}#{offset_m}" <> format(moment, rest)
-    else
-      "-#{offset_h}#{offset_m}" <> format(moment, rest)
-    end
-  end
-
-  def format(moment, "Z" <> rest) do
-    offset_h = format_digits(div(abs(moment.offset), 60), 2)
-    offset_m = format_digits(rem(abs(moment.offset), 60), 2)
-    if moment.offset >= 0 do
-      "+#{offset_h}:#{offset_m}" <> format(moment, rest)
-    else
-      "-#{offset_h}:#{offset_m}" <> format(moment, rest)
-    end
-  end
-
-  def format(moment, << h, rest :: binary >>) do
-    << h, format(moment, rest) :: binary >>
-  end
-
-  def format(moment, "") do
-    ""
+  def format(moment, format_str) do
+    format(moment, format_str, "")
   end
 
 
   # Private
   # -------
+
+  defp format(moment, "YYYY" <> rest, output_str) do
+    format(moment, rest, output_str <> Integer.to_string(moment.year))
+  end
+
+  defp format(moment, "YY" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(rem(moment.year, 100), 2))
+  end
+
+  defp format(moment, "Q" <> rest, output_str) do
+    format(moment, rest, output_str <> Integer.to_string(quarter(moment)))
+  end
+
+  defp format(moment, "MM" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(moment.month, 2))
+  end
+
+  defp format(moment, "M" <> rest, output_str) do
+    format(moment, rest, output_str <> Integer.to_string(moment.month))
+  end
+
+  defp format(moment, "DD" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(moment.day, 2))
+  end
+
+  defp format(moment, "D" <> rest, output_str) do
+    format(moment, rest, output_str <> Integer.to_string(moment.day))
+  end
+
+  defp format(moment, "HH" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(moment.hour, 2))
+  end
+
+  defp format(moment, "H" <> rest, output_str) do
+    format(moment, rest, output_str <> Integer.to_string(moment.hour))
+  end
+
+  defp format(moment, "mm" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(moment.minute, 2))
+  end
+
+  defp format(moment, "m" <> rest, output_str) do
+    format(moment, rest, output_str <> Integer.to_string(moment.minute))
+  end
+
+  defp format(moment, "ss" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(moment.second, 2))
+  end
+
+  defp format(moment, "s" <> rest, output_str) do
+    format(moment, rest, output_str <> Integer.to_string(moment.second))
+  end
+
+  defp format(moment, "SSSSSSSSS" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(moment.nanosecond, 9))
+  end
+
+  defp format(moment, "SSSSSS" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(div(moment.nanosecond, 1_000), 6))
+  end
+
+  defp format(moment, "SSS" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(div(moment.nanosecond, 1_000_000), 3))
+  end
+
+  defp format(moment, "SS" <> rest, output_str) do
+    format(moment, rest, output_str <> format_digits(div(moment.nanosecond, 10_000_000), 2))
+  end
+
+  defp format(moment, "S" <> rest, output_str) do
+    format(moment, rest, output_str <> Integer.to_string(div(moment.nanosecond, 100_000_000)))
+  end
+
+  defp format(moment, "ZZ" <> rest, output_str) do
+    offset_h = format_digits(div(abs(moment.offset), 60), 2)
+    offset_m = format_digits(rem(abs(moment.offset), 60), 2)
+    if moment.offset >= 0 do
+      format(moment, rest, output_str <> "+#{offset_h}#{offset_m}")
+    else
+      format(moment, rest, output_str <> "-#{offset_h}#{offset_m}")
+    end
+  end
+
+  defp format(moment, "Z" <> rest, output_str) do
+    offset_h = format_digits(div(abs(moment.offset), 60), 2)
+    offset_m = format_digits(rem(abs(moment.offset), 60), 2)
+    if moment.offset >= 0 do
+      format(moment, rest, output_str <> "+#{offset_h}:#{offset_m}")
+    else
+      format(moment, rest, output_str <> "-#{offset_h}:#{offset_m}")
+    end
+  end
+
+  defp format(moment, << h, rest :: binary >>, output_str) do
+    format(moment, rest, output_str <> <<h>>)
+  end
+
+  defp format(_moment, "", output_str) do
+    output_str
+  end
 
   defp calc_offset(now) do
     local = now
@@ -199,7 +241,7 @@ defmodule Moment do
     div(local, 60) - div(universal, 60)
   end
 
-  defp format_digits(i, n \\ 2) do
+  defp format_digits(i, n) do
     :erlang.iolist_to_binary(:io_lib.format("~.#{n}.0w", [i]))
   end
 end
