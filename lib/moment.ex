@@ -1,5 +1,5 @@
 defmodule Moment do
-  defstruct year: 2014, month: 9, day: 8,
+  defstruct year: 2014, month: 0, day: 0,
             hour: 0, minute: 0, second: 0,
             nanosecond: 0, offset: 0
 
@@ -45,66 +45,66 @@ defmodule Moment do
   end
 
   @doc """
-  quarter, in [1; 4]
+  quarter, in 1..4
   """
   def quarter(moment) do
     div(moment.month - 1, 3) + 1
   end
 
   @doc """
-  month, in [1; 12]
+  month, in 1..12
   """
   def month(moment) do
     moment.month
   end
 
   @doc """
-  day, in [1; 31]
+  day, in 1..31
   """
   def day(moment) do
     moment.day
   end
 
   @doc """
-  hour, in [0; 23]
+  hour, in 0..23
   """
   def hour(moment) do
     moment.hour
   end
 
   @doc """
-  minute, in [0; 59]
+  minute, in 0..59
   """
   def minute(moment) do
     moment.minute
   end
 
   @doc """
-  second, in [0; 59]
+  second, in 0..59
   """
   def second(moment) do
     moment.second
   end
 
   @doc """
-  millisecond, in [0; 1000[
+  millisecond, in 0..999
   """
   def millisecond(moment) do
     div(moment.nanosecond, 1_000_000)
   end
 
   @doc """
-  microsecond, in [0; 1,000,000[
+  microsecond, in 0..999
   """
   def microsecond(moment) do
-    div(moment.nanosecond, 1_000)
+    rem(div(moment.nanosecond, 1_000), 1000)
   end
 
   @doc """
-  nanosecond, in [0; 1,000,000,000[
+  nanosecond, in 0..999
   """
   def nanosecond(moment) do
-    moment.nanosecond
+    rem(moment.nanosecond, 1000)
   end
 
 
