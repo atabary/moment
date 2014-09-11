@@ -64,8 +64,4 @@ defmodule Moment.MomentTest do
   defp make_utc_moment() do
     %Moment{year: 2014, month: 9, day: 10, hour: 11, minute: 36, second: 55, nanosecond: 566245037, offset: 0}
   end
-
-  # defp make_utc_moment() do
-  #   %Moment{day: 10, hour: 11, minute: 36, month: 9, nanosecond: 566245000, offset: 0, second: 55, year: 2014}
-  # end
 end
