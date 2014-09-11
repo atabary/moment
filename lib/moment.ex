@@ -117,6 +117,25 @@ defmodule Moment do
     Moment.Formatter.format(moment, format_str)
   end
 
+  @doc """
+  Parse the moment string according to format string.
+
+  Returns `{:ok, moment}` in case of success,
+  `{:error, reason}` otherwise.
+  """
+  def parse(moment_str, format_str) do
+    Moment.Parser.parse(moment_str, format_str)
+  end
+
+  @doc """
+  Parse the moment string according to format string.
+
+  Fails with a `RuntimeError` if the moment cannot be parsed.
+  """
+  def parse!(moment_str, format_str) do
+    Moment.Parser.parse!(moment_str, format_str)
+  end
+
 
   # Private
   # -------

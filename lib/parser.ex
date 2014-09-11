@@ -1,14 +1,41 @@
 defmodule Moment.Parser do
 
+  def parse!(moment_str, format_str) do
+    parse!(moment_str, format_str, Moment.now())
+  end
+
+  def parse!(moment_str, format_str, default) do
+    case parse(moment_str, format_str, default) do
+      {:ok, moment} ->
+        moment
+      {:error, reason} ->
+        raise reason
+    end
+  end
+
   def parse(moment_str, format_str) do
-    map = build_regex!(format_str)
-       |> Regex.named_captures(moment_str)
+    parse(moment_str, format_str, Moment.now())
+  end
 
-    now = Moment.now()
+  def parse(moment_str, format_str, default) do
+    case build_regex(format_str) do
+      {:error, reason} ->
+        {:error, reason}
+      {:ok, regex} ->
+        parse_with_regex(moment_str, regex, default)
+    end
+  end
 
-    %Moment{year: get_year(map, now.year), month: get_month(map, now.month), day: get_day(map, now.day),
-            hour: get_hour(map, 0), minute: get_minute(map, 0), second: get_second(map, 0),
-            nanosecond: get_nanosecond(map, 0), offset: get_offset(map, now.offset)}
+  defp parse_with_regex(moment_str, regex, default) do
+    case Regex.named_captures(regex, moment_str) do
+      nil ->
+        {:error, "regex and string do not match"}
+      map ->
+        {:ok, %Moment{year: get_year(map, default.year), month: get_month(map, default.month),
+                      day: get_day(map, default.day), hour: get_hour(map, 0), minute: get_minute(map, 0),
+                      second: get_second(map, 0), nanosecond: get_nanosecond(map, 0),
+                      offset: get_offset(map, default.offset)}}
+    end
   end
 
 
