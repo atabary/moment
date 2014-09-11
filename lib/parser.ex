@@ -146,7 +146,7 @@ defmodule Moment.Parser do
 
       Dict.has_key?(map, "YY") ->
         {yy, _} = Integer.parse(Dict.get(map, "YY"))
-        if yy >= 70, do: yy + 1900, else: yy + 2000
+        if yy > 68, do: yy + 1900, else: yy + 2000
 
       true ->
         default
