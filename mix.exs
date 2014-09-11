@@ -3,7 +3,7 @@ defmodule Calendar.Mixfile do
 
   def project do
     [app: :moment,
-     version: "0.0.1",
+     version: "0.1.0",
      elixir: ">=1.0.0",
      package: package,
      description: "Parse, validate, manipulate, and display dates in Elixir.",
