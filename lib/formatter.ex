@@ -113,4 +113,5 @@ defmodule Moment.Formatter do
   defp format_digits(i, n) do
     :erlang.iolist_to_binary(:io_lib.format("~.#{n}.0w", [i]))
   end
+
 end

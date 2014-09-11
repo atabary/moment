@@ -33,10 +33,6 @@ defmodule Moment do
             nanosecond: microsecond * 1000, offset: offset}
   end
 
-
-  # Accessors
-  # ---------
-
   @doc """
   year
   """
@@ -107,15 +103,11 @@ defmodule Moment do
     rem(moment.nanosecond, 1000)
   end
 
-
-  # Formatting
-  # ----------
-
   @doc """
-  Format moment as an ISO8601 string.
+  Format moment as an iso8601 string.
   """
   def to_iso_string(moment) do
-    format(moment, "YYYY-MM-DDTHH:mm:ss.SSSZ")
+    Moment.Formatter.format(moment, "YYYY-MM-DDTHH:mm:ss.SSSZ")
   end
 
   @doc """
@@ -125,101 +117,9 @@ defmodule Moment do
     Moment.Formatter.format(moment, format_str)
   end
 
-  def build_regex!(format_str) do
-    Regex.compile!(build_regex(format_str, ""))
-  end
-
-  def build_regex(format_str) do
-    Regex.compile(build_regex(format_str, ""))
-  end
-
 
   # Private
   # -------
-
-  defp build_regex("YYYY" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<YYYY>\d{4})")
-  end
-
-  defp build_regex("YY" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<YY>\d{2})")
-  end
-
-  defp build_regex("MM" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<MM>\d{2})")
-  end
-
-  defp build_regex("M" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<M>\d{1,2})")
-  end
-
-  defp build_regex("DD" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<DD>\d{2})")
-  end
-
-  defp build_regex("D" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<D>\d{1,2})")
-  end
-
-  defp build_regex("HH" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<HH>\d{2})")
-  end
-
-  defp build_regex("H" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<H>\d{1,2})")
-  end
-
-  defp build_regex("mm" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<mm>\d{2})")
-  end
-
-  defp build_regex("m" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<m>\d{1,2})")
-  end
-
-  defp build_regex("ss" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<ss>\d{2})")
-  end
-
-  defp build_regex("s" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<s>\d{1,2})")
-  end
-
-  defp build_regex("SSSSSSSSS" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<SSSSSSSSS>\d{9})")
-  end
-
-  defp build_regex("SSSSSS" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<SSSSSS>\d{6})")
-  end
-
-  defp build_regex("SSS" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<SSS>\d{3})")
-  end
-
-  defp build_regex("SS" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<SS>\d{2})")
-  end
-
-  defp build_regex("S" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<S>\d{1})")
-  end
-
-  defp build_regex("ZZ" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<ZZ>[+-]\d{4})")
-  end
-
-  defp build_regex("Z" <> rest, regex_str) do
-    build_regex(rest, regex_str <> ~S"(?<Z>[+-]\d{2}\:\d{2})")
-  end
-
-  defp build_regex(<< h, rest :: binary >>, regex_str) do
-    build_regex(rest, regex_str <> "\\" <> <<h>>)
-  end
-
-  defp build_regex("", regex_str) do
-    regex_str
-  end
 
   defp calc_offset(now) do
     local = now
