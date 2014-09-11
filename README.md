@@ -1,6 +1,9 @@
 # Moment
 
+[![Build Status](http://img.shields.io/travis/atabary/moment/master.svg)](https://travis-ci.org/atabary/moment)
+
 Moment is designed to bring easy date and time handling to Elixir. Its semantic (notably for formatting/parsing) is inspired by [Moment.js](http://momentjs.com/).
+
 
 ## Examples
 
