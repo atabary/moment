@@ -42,10 +42,6 @@ defmodule Moment.Parser do
   # Private
   # -------
 
-  defp build_regex!(format_str) do
-    Regex.compile!(build_regex(format_str, ""))
-  end
-
   defp build_regex(format_str) do
     Regex.compile(build_regex(format_str, ""))
   end
